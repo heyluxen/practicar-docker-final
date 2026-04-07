@@ -40,8 +40,31 @@ Se usan varias etapas:
 - **prod-deps**: Instala **solo** las dependencias necesarias para ejecutar la aplicación en producción (sin herramientas de compilación).
 - **prod**: Es la etapa final. Copia el código compilado (`dist`) y las dependencias de producción, y define el comando que arrancará el servidor. Esta imagen es pequeña y no contiene nada superfluo.
 
+## Paso 2: Dockerfile del frontend (Angular + Nginx) y configuración del proxy
+
+### Dockerfile del frontend
+
+Este archivo tiene dos etapas:
+- **build**: Usa Node para compilar la aplicación Angular.
+- **runtime**: Usa Nginx para servir los archivos estáticos.
+
+### Configuración de Nginx (nginx.conf)
+
+Nginx sirve como servidor web y como proxy inverso:
+- Sirve los archivos estáticos de Angular.
+- Redirige las peticiones que empiezan con `/api` hacia el backend (`http://backend:3000`).
+- Maneja WebSockets para `/socket.io`.
+
+Esta configuración evita problemas de CORS porque el navegador solo habla con Nginx.
 
 ## Capturas de Evidencia:
 
+El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio Code. Se ven las cinco etapas (dev, dev-deps, builder, prod-deps, prod) con sus comandos.
 ![alt text](image.png)
 ![alt text](image-1.png)
+
+El archivo angular-tesloshop/Dockerfile en el editor. Se distinguen dos etapas: build (compila Angular con Node) y runtime (sirve los archivos con Nginx).
+![alt text](image-2.png)
+El contenido de angular-tesloshop/nginx.conf. Se ven las reglas location / (para el enrutamiento de la SPA), location ~* \.(js|css|...) (caché de estáticos) y location ^~ /api (proxy hacia el backend).
+![alt text](image-3.png)
+![alt text](image-4.png)
