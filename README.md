@@ -57,6 +57,13 @@ Nginx sirve como servidor web y como proxy inverso:
 
 Esta configuración evita problemas de CORS porque el navegador solo habla con Nginx.
 
+## Paso 4: Variables de entorno
+
+La aplicación necesita varios valores para funcionar: credenciales de la base de datos, puertos, modos de ejecución, claves secretas, etc. En lugar de escribir estos valores directamente en los archivos de configuración, se guardan en un archivo llamado `.env`. Esto permite tener un solo lugar donde cambiar contraseñas o puertos sin modificar el código.
+
+- **`.env.example`** – Es una plantilla que se sube al repositorio. Es donde estan todas las variables con valores de ejemplo o marcadores como `cambiar_por_un_secreto_seguro`.
+- **`.env`** – Es el archivo real con los valores de contraseñas, secretos, etc. **Este archivo NO se sube al repositorio** porque tiene información sensible. Está adentro en `.gitignore`.
+
 ## Capturas de Evidencia:
 
 El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio Code. Se ven las cinco etapas (dev, dev-deps, builder, prod-deps, prod) con sus comandos.
@@ -65,6 +72,13 @@ El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio
 
 El archivo angular-tesloshop/Dockerfile en el editor. Se distinguen dos etapas: build (compila Angular con Node) y runtime (sirve los archivos con Nginx).
 ![alt text](image-2.png)
+
 El contenido de angular-tesloshop/nginx.conf. Se ven las reglas location / (para el enrutamiento de la SPA), location ~* \.(js|css|...) (caché de estáticos) y location ^~ /api (proxy hacia el backend).
 ![alt text](image-3.png)
 ![alt text](image-4.png)
+
+El contenido del archivo .env.exampl se ven todas las variables agrupadas por servicio: PostgreSQL (usuario, contraseña, base de datos, puerto), backend (host, puerto, JWT_SECRET, etc.) y frontend
+![alt text](image-5.png)
+
+El archivo .env ya con valores reales (contraseñas cambiadas, JWT_SECRET personalizado). POSTGRES_PASSWORD y DB_PASSWORD tienen el mismo valor, y que DB_HOST está como db.
+![alt text](image-6.png)
