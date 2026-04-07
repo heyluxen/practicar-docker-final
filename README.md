@@ -79,6 +79,27 @@ El archivo `docker-compose.yml` es el corazón de la orquestación. En él se de
 - **Red `teslo-network`**: Red interna tipo bridge. Permite que los servicios se comuniquen usando sus nombres (`db`, `backend`, `frontend`).
 - **Volumen `postgres-data`**: Almacena los archivos de la base de datos fuera del contenedor, para que no se pierdan al reiniciar.
 
+## Paso 6: Scripts de arranque y parada
+
+### `start.sh`
+
+Este archivo hace:
+- Verifica que Docker Desktop esté corriendo.
+- Construye las imágenes y levanta los contenedores en segundo plano (`docker compose up --build -d`).
+- Espera 10 segundos para que los servicios terminen de iniciar.
+- Muestra las URLs de acceso y comandos útiles.
+
+
+### `stop.sh`
+
+Detiene y elimina los contenedores y la red, pero **conserva los datos de PostgreSQL** en el volumen `postgres-data`. Si se desea eliminar también los datos, se debe ejecutar `docker compose down -v`.
+
+### Permisos de ejecución
+
+En Git Bash, se deben dar permisos con este comando:
+
+chmod +x start.sh stop.sh
+
 ## Capturas de Evidencia:
 
 El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio Code. Se ven las cinco etapas (dev, dev-deps, builder, prod-deps, prod) con sus comandos.
@@ -102,3 +123,8 @@ Muestra el archivo de orquestación que define los tres servicios (db, backend, 
 ![alt text](image-7.png)
 ![alt text](image-8.png)
 ![alt text](image-9.png)
+
+Verificación de Docker, construcción de imágenes y arranque de contenedores.
+![alt text](image-10.png)
+El script que detiene los contenedores sin eliminar los datos de la base de datos.
+![alt text](image-11.png)
