@@ -64,6 +64,21 @@ La aplicación necesita varios valores para funcionar: credenciales de la base d
 - **`.env.example`** – Es una plantilla que se sube al repositorio. Es donde estan todas las variables con valores de ejemplo o marcadores como `cambiar_por_un_secreto_seguro`.
 - **`.env`** – Es el archivo real con los valores de contraseñas, secretos, etc. **Este archivo NO se sube al repositorio** porque tiene información sensible. Está adentro en `.gitignore`.
 
+## Paso 5: Orquestación con Docker Compose
+
+El archivo `docker-compose.yml` es el corazón de la orquestación. En él se definen los tres contenedores, cómo se construyen, cómo se comunican y qué recursos comparten.
+
+### Servicios definidos
+
+- **db**: Base de datos PostgreSQL. Usa la imagen oficial, expone el puerto 5432 (solo para depuración) y define un `healthcheck` para saber cuándo está realmente lista.
+- **backend**: API NestJS. Se construye a partir del Dockerfile en `./teslo-shop`. Usa la etapa `${STAGE}` (por defecto `dev`). Depende de `db` con `condition: service_healthy`.
+- **frontend**: Aplicación Angular servida por Nginx. Se construye desde `./angular-tesloshop`. Depende de `backend` (solo espera que arranque).
+
+### Red y volúmenes
+
+- **Red `teslo-network`**: Red interna tipo bridge. Permite que los servicios se comuniquen usando sus nombres (`db`, `backend`, `frontend`).
+- **Volumen `postgres-data`**: Almacena los archivos de la base de datos fuera del contenedor, para que no se pierdan al reiniciar.
+
 ## Capturas de Evidencia:
 
 El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio Code. Se ven las cinco etapas (dev, dev-deps, builder, prod-deps, prod) con sus comandos.
@@ -82,3 +97,8 @@ El contenido del archivo .env.exampl se ven todas las variables agrupadas por se
 
 El archivo .env ya con valores reales (contraseñas cambiadas, JWT_SECRET personalizado). POSTGRES_PASSWORD y DB_PASSWORD tienen el mismo valor, y que DB_HOST está como db.
 ![alt text](image-6.png)
+
+Muestra el archivo de orquestación que define los tres servicios (db, backend, frontend), sus dependencias, volúmenes y red interna.
+![alt text](image-7.png)
+![alt text](image-8.png)
+![alt text](image-9.png)
