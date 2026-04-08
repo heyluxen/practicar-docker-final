@@ -100,6 +100,20 @@ En Git Bash, se deben dar permisos con este comando:
 
 chmod +x start.sh stop.sh
 
+## Paso 7 Ejecutar todo por primera vez: 
+
+### docker --version y docker compose version
+Estos comandos verifican que Docker Desktop esté instalado y que el motor de Docker esté corriendo. Docker Desktop incluye el Docker Engine, el CLI y Docker Compose. Si alguno falla, se debe instalar o reiniciar Docker Desktop desde docker.com.
+
+### docker compose up --build -d
+Construye las imágenes si es necesario y levanta los contenedores en segundo plano. Docker Compose lee el archivo docker-compose.yml y las variables de entorno del archivo .env para crear la red, los volúmenes y los servicios.
+
+### docker compose ps
+Muestra el estado de los contenedores gestionados por Compose. Es útil para verificar que todos los servicios estén Up y que la base de datos esté healthy gracias al healthcheck que esta en  el archivo docker-compose.yml.
+
+### curl http://localhost:3000/api/seed
+Envía una petición HTTP GET al endpoint de seed del backend. Este endpoint borra los datos existentes y los reemplaza con productos y usuarios de prueba. La respuesta "SEED EXECUTED" confirma que la operación fue exitosa.
+
 ## Capturas de Evidencia:
 
 El contenido completo del archivo teslo-shop/Dockerfile abierto en Visual Studio Code. Se ven las cinco etapas (dev, dev-deps, builder, prod-deps, prod) con sus comandos.
@@ -128,3 +142,18 @@ Verificación de Docker, construcción de imágenes y arranque de contenedores.
 ![alt text](image-10.png)
 El script que detiene los contenedores sin eliminar los datos de la base de datos.
 ![alt text](image-11.png)
+
+Salida de los comandos docker --version y docker compose version. Se verifica que Docker Desktop esté correctamente instalado y accesible.
+<img width="461" height="120" alt="Captura de pantalla 2026-04-07 230346" src="https://github.com/user-attachments/assets/fa92e007-52f3-4edc-9b1e-e45b7d11cc9a" />
+
+
+Salida de docker compose ps con los tres contenedores Up (y db en healthy).
+<img width="1126" height="120" alt="Captura de pantalla 2026-04-07 225208" src="https://github.com/user-attachments/assets/a785e1eb-f463-4d63-bfe5-c125ad015786" />
+
+
+ Terminal con curl http://localhost:3000/api/seed y respuesta "SEED EXECUTED".
+<img width="459" height="50" alt="Captura de pantalla 2026-04-07 225256" src="https://github.com/user-attachments/assets/e320b448-e21d-4bca-a701-3d6007b863e2" />
+
+
+Mostrando la tienda TesloShop con productos.
+<img width="1342" height="575" alt="Captura de pantalla 2026-04-07 225419" src="https://github.com/user-attachments/assets/f08fbfd0-8cc0-42e4-ad4c-80e872221e36" />
